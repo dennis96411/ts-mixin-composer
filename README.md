@@ -1,4 +1,4 @@
-## TypeScript Mixin Composer
+# TypeScript Mixin Composer
 An abstract mixin composer class for TypeScript
 
 ## Why?
