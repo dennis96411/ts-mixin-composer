@@ -11,7 +11,7 @@ class C {
 
 // Base class for mixins
 class Z extends MixedIn/*<typeof A, typeof B, typeof C>*/ implements A, B, C {
-	// Mixins
+	// Mixin properties and methods; needed to satisfy compiler for implementing the mixins
 	/* A */ a: typeof A.prototype.a; aMethod: typeof A.prototype.aMethod;
 	/* B */ b: typeof B.prototype.b; bMethod: typeof B.prototype.bMethod;
 	/* C */ c: typeof C.prototype.c; cMethod: typeof C.prototype.cMethod;
@@ -19,10 +19,10 @@ class Z extends MixedIn/*<typeof A, typeof B, typeof C>*/ implements A, B, C {
 	// Normal class properties
 	z: number = 3; zMethod(): void { console.log("I am in Z:", this.z); }
 
-  constructor(cNumber: number) {
+	constructor(cNumber: number) {
 		super(A, B, [C, cNumber]); // mixin A; mixin B; mixin C with constructor argument cNumber
 		this.z = this.a + this.b + this.c + this.z; // At this point, all mixin properties are accessible within our instance
-  }
+	}
 }
 
 // Create an instance of Z with mixins from A, B, and C
