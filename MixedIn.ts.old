@@ -1,3 +1,4 @@
+// This method is deprecated; use the other method in MixIn.ts
 export abstract class MixedIn<
 	T1 extends Function = Function, T2 extends Function = Function, T3 extends Function = Function, T4 extends Function = Function, T5 extends Function = Function,
 	T6 extends Function = Function, T7 extends Function = Function, T8 extends Function = Function, T9 extends Function = Function, T10 extends Function = Function
