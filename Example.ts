@@ -42,23 +42,23 @@ class X implements A, B, C, D {
 	x: number = 4;
 	xMethod(): void { console.log("I am in X: a + b + c + d + Math.PI =", this.x); }
 
-	constructor(dNumber: number) {
+	constructor(dNumber?: number) {
 		// Apply mix-ins to a class instance from within its constructor
 		if (applyInConstructor)
-			mixIn(this, [
+			Utilities.Miscellaneous.mixIn(this, [
 				A, // Normal class
 				B, // Abstract class
 				new C(3), // Class instance
 				[D, dNumber] // Normal/abstract class with constructor arguments
 			]);
-		
+
 		this.x = this.a + this.b + this.c + this.d + this.x; // At this point, all mix-in fields are accessible
 	}
 }
 
 // Apply mix-ins to the class itself
 if (!applyInConstructor)
-	mixIn(X, [
+	Utilities.Miscellaneous.mixIn(X, [
 		A, // Normal class
 		B, // Abstract class
 		new C(3), // Class instance
@@ -70,7 +70,7 @@ if (!applyInConstructor)
  * Test mix-in properties and methods
  */
 
-const x: X = new X(Math.PI);
+const x: X = applyInConstructor ? new X(Math.PI) : new X();
 
 // Mix-ins from class A
 console.log("a =", x.a); // a = 1
@@ -91,3 +91,26 @@ x.dMethod(); // I am in D: d = 3.141592653589793
 // Class X's own fields
 console.log("x =", x.x); // x = 13.141592653589793
 x.xMethod(); // I am in X: a + b + c + d + Math.PI = 13.141592653589793
+
+
+/**
+ * mixIn argument type assertion tests - checks TypeScript's linter; uncomment to check
+ * - Argument 1 can only be a class or an instance
+ * - Argument 2 can only be an array of a class, an instance, or an array of the type [class, ...class_constructor_args]
+ */
+
+// Valid
+Utilities.Miscellaneous.mixIn(X, [A, B]);
+Utilities.Miscellaneous.mixIn(new X(), [A, B]);
+Utilities.Miscellaneous.mixIn(B, [A, B, new C(0)]);
+Utilities.Miscellaneous.mixIn(new X(), [A, B, new C(0), [D, 0]]); // Constructs class D with argument array [0]
+
+// Invalid argument 1 (base); similar constraints apply to argument 2 (mix-ins)
+/*Utilities.Miscellaneous.mixIn({}, [A, B]); // Generic object; caught at runtime since there's no way to differentiate it between a class instance at compile time
+Utilities.Miscellaneous.mixIn([], [A, B]); // Array; compile-time check
+Utilities.Miscellaneous.mixIn("", [A, B]); // String; compile-time check
+Utilities.Miscellaneous.mixIn(0, [A, B]); // Number; compile-time check
+Utilities.Miscellaneous.mixIn(true, [A, B]); // Boolean; compile-time check
+Utilities.Miscellaneous.mixIn(Symbol.toStringTag, [A, B]); // Symbol; compile-time check
+Utilities.Miscellaneous.mixIn(null, [A, B]); // Null; caught at runtime if strictNullChecks is false
+Utilities.Miscellaneous.mixIn(undefined, [A, B]); // Undefined; caught at runtime if strictNullChecks is false*/
