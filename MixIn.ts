@@ -4,13 +4,18 @@
 type Class = Function & { prototype: { constructor: Class; }; };
 
 /**
+ * An array holding a class as the first element and its constructor arguments as the rest
+ */
+type ClassConstructionArray = { 0: Class; [index: number]: any };
+
+/**
  * An instance of a class; requires runtime constructor check to ensure that it's not a generic object
  */
 type Instance = {
     constructor: Class; // Constructor is a normal or abstract class; check against Object at runtime to ensure it's a valid class
     prototype?: never; // Exclude classes
     [Symbol.unscopables]?(): never; // Exclude arrays
-    [property: string]: NonNullable<any>; // Exclude other primitives (except null and undefined unless strictNullChecks is true)
+    [property: string]: any; // Exclude other primitives (except null and undefined)
 };
 
 /**
@@ -18,7 +23,7 @@ type Instance = {
  * @param Base The base instance or class to apply the mix-ins to
  * @param Mixins The mix-in instances and/or classes to apply to the base
  */
-export function mixIn(Base: Instance | Class, Mixins: (Instance | Class | [Class, ...any[]])[]): typeof Base {
+export function mixIn(Base: Instance | Class, Mixins: (Instance | Class | ClassConstructionArray)[]): typeof Base {
     // Perform runtime argument type checks that cannot be done at compile time
     if (!Base || Base.constructor === Object) // Make sure the base is non-null and that it's not just a generic object
         throw new TypeError("You must pass a valid instance or class for the base argument!");
