@@ -1,6 +1,6 @@
 # TypeScript Mix-in Composer
 
-A mix-in composer for TypeScript that applies mix-ins classes and/or class instances to a class (outside of its constructor) or to its instances (from within its class' constructor)
+A mix-in composer function for TypeScript that applies mix-ins classes and/or their instances to a class (outside of its constructor) or to its instances (from within its constructor)
 
 
 ## What does it do?
@@ -126,4 +126,4 @@ console.log(X.prototype.property); // undefined (the property is copied into ins
 console.log(new X("hello").property); // hello
 ```
 
-A more complete example with various usage methods can be found in [Example.ts](Example.ts).
+A more comprehensive example with various usage methods and argument type-assertion tests for `mixIn` can be found in [Example.ts](Example.ts).
