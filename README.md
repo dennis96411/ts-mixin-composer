@@ -3,6 +3,11 @@
 A mix-in composer for TypeScript that applies mix-ins classes and/or class instances to a class (outside of its constructor) or to its instances (from within its class' constructor)
 
 
+## What does it do?
+
+[A comprehensive example on mix-ins has been provided by TypeScript's handbook](https://www.typescriptlang.org/docs/handbook/mixins.html). This module aims to perform the same task with a slight tweak to correct an inheritence problem.
+
+
 ## How is this different from the method in [TypeScript's handbook](https://www.typescriptlang.org/docs/handbook/mixins.html)?
 
 If you initialize non-method properties within the constructor or in the outer body of your mix-in classes, they will not be mixed into your base class.
@@ -115,10 +120,10 @@ class X implements A {
 	}
 }
 
-console.log(X.prototype.method); // undefined (the property is copied into instances of X at instantiation time)
+console.log(X.prototype.method); // undefined (the method is copied into instances of X at instantiation time)
 console.log(new X("hello").method); // method() { ... }
 console.log(X.prototype.property); // undefined (the property is copied into instances of X at instantiation time)
 console.log(new X("hello").property); // hello
 ```
 
-A more complete example with various usage methods can be found in Example.ts.
+A more complete example with various usage methods can be found in [Example.ts](Example.ts).
