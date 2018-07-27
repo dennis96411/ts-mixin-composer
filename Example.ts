@@ -1,5 +1,5 @@
 import { mixIn } from "./MixIn";
-const applyInConstructor: boolean = false; // Choose when the mix-ins are applied
+const applyInConstructor: boolean = true; // Choose when the mix-ins are applied
 
 
 /**
@@ -33,10 +33,10 @@ abstract class D {
 
 class X implements A, B, C, D {
 	// Mix-ins
-	/* A */ a: typeof A.prototype.a; aMethod: typeof A.prototype.aMethod;
-	/* B */ b: typeof B.prototype.b; bMethod: typeof B.prototype.bMethod;
-	/* C */ c: typeof C.prototype.c; cMethod: typeof C.prototype.cMethod;
-	/* D */ d: typeof D.prototype.d; dMethod: typeof D.prototype.dMethod;
+	/* A */ a!: typeof A.prototype.a; aMethod!: typeof A.prototype.aMethod;
+	/* B */ b!: typeof B.prototype.b; bMethod!: typeof B.prototype.bMethod;
+	/* C */ c!: typeof C.prototype.c; cMethod!: typeof C.prototype.cMethod;
+	/* D */ d!: typeof D.prototype.d; dMethod!: typeof D.prototype.dMethod;
 
 	// Normal class properties and methods
 	x: number = 4;
@@ -45,7 +45,7 @@ class X implements A, B, C, D {
 	constructor(dNumber?: number) {
 		// Apply mix-ins to a class instance from within its constructor
 		if (applyInConstructor)
-			Utilities.Miscellaneous.mixIn(this, [
+			mixIn(this, [
 				A, // Normal class
 				B, // Abstract class
 				new C(3), // Class instance
@@ -58,7 +58,7 @@ class X implements A, B, C, D {
 
 // Apply mix-ins to the class itself
 if (!applyInConstructor)
-	Utilities.Miscellaneous.mixIn(X, [
+	mixIn(X, [
 		A, // Normal class
 		B, // Abstract class
 		new C(3), // Class instance
@@ -100,17 +100,17 @@ x.xMethod(); // I am in X: a + b + c + d + Math.PI = 13.141592653589793
  */
 
 // Valid
-Utilities.Miscellaneous.mixIn(X, [A, B]);
-Utilities.Miscellaneous.mixIn(new X(), [A, B]);
-Utilities.Miscellaneous.mixIn(B, [A, B, new C(0)]);
-Utilities.Miscellaneous.mixIn(new X(), [A, B, new C(0), [D, 0]]); // Constructs class D with argument array [0]
+mixIn(X, [A, B]); // Mix class properties into a class
+mixIn(new X(), [A, B]); // Mix class properties into an instance
+mixIn(B, [A, B, new C(0)]); // Mix instance properties into a class
+mixIn(new X(), [A, B, new C(0), [D, 0]]); // Mix instance properties into an instance; constructs class D with argument array [0]
 
 // Invalid argument 1 (base); similar constraints apply to argument 2 (mix-ins)
-/*Utilities.Miscellaneous.mixIn({}, [A, B]); // Generic object; caught at runtime since there's no way to differentiate it between a class instance at compile time
-Utilities.Miscellaneous.mixIn([], [A, B]); // Array; compile-time check
-Utilities.Miscellaneous.mixIn("", [A, B]); // String; compile-time check
-Utilities.Miscellaneous.mixIn(0, [A, B]); // Number; compile-time check
-Utilities.Miscellaneous.mixIn(true, [A, B]); // Boolean; compile-time check
-Utilities.Miscellaneous.mixIn(Symbol.toStringTag, [A, B]); // Symbol; compile-time check
-Utilities.Miscellaneous.mixIn(null, [A, B]); // Null; caught at runtime if strictNullChecks is false
-Utilities.Miscellaneous.mixIn(undefined, [A, B]); // Undefined; caught at runtime if strictNullChecks is false*/
+/*mixIn({}, [A, B]); // Generic object; caught at runtime since there's no way to differentiate it between a class instance at compile time
+mixIn([], [A, B]); // Array; caught at compile-time
+mixIn("", [A, B]); // String; caught at compile-time
+mixIn(0, [A, B]); // Number; caught at compile-time
+mixIn(true, [A, B]); // Boolean; caught at compile-time
+mixIn(Symbol.toStringTag, [A, B]); // Symbol; caught at compile-time
+mixIn(null, [A, B]); // Null; caught at compile-time if strictNullChecks is true; otherwise caught at runtime
+mixIn(undefined, [A, B]); // Undefined; caught at compile-time if strictNullChecks is true; otherwise caught at runtime*/
