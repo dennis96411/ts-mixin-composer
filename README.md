@@ -73,6 +73,8 @@ console.log(new X().property); // hi
 You could use it just as the way `applyMixins` is used above.
 
 ```ts
+import { mixIn } from "./MixIn";
+
 class A {
 	public property: string = "hi";
 	public method(): void {}
@@ -94,6 +96,8 @@ console.log(new X().property); // hi
 You could also call `mixIn` from inside the constructor to avoid polluting your class' prototype, which also makes it possible to pass along arguments to the constructors of your mix-in classes at instantiation time.
 
 ```ts
+import { mixIn } from "./MixIn";
+
 class A {
 	constructor(public property: string) {};
 	public method(): void {}
